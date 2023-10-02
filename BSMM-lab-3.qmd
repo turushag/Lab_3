@@ -1,8 +1,8 @@
 ---
 title: "BSMM-lab-3"
 subtitle: "BSMM 8740 Fall 2023"
-author: "Add your name here"
-date: "Add the date here"
+author: "Turusha Ghimire"
+date: "1st October 2023"
 format: html
 editor: visual
 self-contained: true
@@ -14,7 +14,18 @@ Load packages and data:
 
 ```{r load-pkg-data}
 #| message: false
+#install.packages("tidyverse")
+#install.packages("gt")          
+#install.packages("gtExtras")     
+#install.packages("DataExplorer")
+#install.packages("tidymodels")
+#install.packages("gt")
 boston_cocktails <- readr::read_csv('data/boston_cocktails.csv')
+```
+
+```{r}
+install.packages("skimr")
+install.packages("janitor")
 ```
 
 ## Exercises
@@ -23,13 +34,67 @@ boston_cocktails <- readr::read_csv('data/boston_cocktails.csv')
 
 The median measure amount across across all cocktails is \_\_\_.
 
+```{r}
+library(magrittr)    
+library(tidyverse)
+boston_cocktails %>%
+  skimr::skim()
+DataExplorer::introduce(boston_cocktails)
+```
+
+```{r}
+boston_cocktails %>%
+  summary()
+```
+
 ### Exercise 2
 
-The **Leap Frog Highball** contains \_\_\_ of gin
+The **Leap Frog Highball** contains \_\_\_ of gin \
+**Answer : 2**
+
+```{r}
+selected_col <- dplyr::select(boston_cocktails, name, category, ingredient, measure_number)
+
+pivoted_data <-selected_col %>%
+  pivot_wider(names_from = ingredient, values_from = measure_number, values_fill = 0)
+pivoted_data <- janitor::clean_names(pivoted_data)
+pivoted_data
+```
+
+```{r}
+cleaned_data <- pivoted_data %>%
+  drop_na()
+new_ds <- cleaned_data
+new_ds
+```
+
+```{r}
+leap_frog_highball <- new_ds %>%
+  filter(name == "Leap Frog Highball") %>%
+  select(gin)
+
+# Print the amount of gin in the cocktail
+print(leap_frog_highball)
+```
 
 ### Exercise 3
 
 \_\_\_ predictor variables are prepped by the recipe.
+
+```{r}
+#install.packages("recipe")
+```
+
+```{r}
+#library(recipes)
+# Create a recipe object
+#recipe_obj <- recipe_obj %>%
+ # recipe::update_role(name,categor='id')
+#summary(recipe_obj)
+
+  
+ 
+```
 
 ### Exercise 4
 
